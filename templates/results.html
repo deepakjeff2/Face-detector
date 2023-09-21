@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Detection Results</title>
+    <style>
+        /* Add CSS styling to control image dimensions */
+        img {
+            max-width: 400px; /* Adjust the maximum width as needed */
+            max-height: 300px; /* Adjust the maximum height as needed */
+            width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Detection Results</h1>
+    <h2>Video Title: {{ video.title }}</h2>
+
+    {% if frames_with_faces %}
+        <h3>Frames with Detected Faces:</h3>
+        <ul>
+            {% for frame in frames_with_faces %}
+                <li>
+                    <img src="{{ frame.frame_image.url }}" alt="Frame with Detected Face">
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No frames with detected faces found.</p>
+    {% endif %}
+
+    <a href="{% url 'upload_video' %}">Upload Another Video</a>
+</body>
+</html>
