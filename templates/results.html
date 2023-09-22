@@ -1,17 +1,64 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Face Detection Results</title>
     <style>
         /* Add CSS styling to control image dimensions */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #007bff;
+        }
+
+        h3 {
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px;
+        }
+
         img {
-            max-width: 400px; /* Adjust the maximum width as needed */
-            max-height: 300px; /* Adjust the maximum height as needed */
+            max-width: 400px;
+            max-height: 300px;
             width: auto;
             height: auto;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+
+        p {
+            color: #333;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <h1>Face Detection Results</h1>
     <h2>Video Title: {{ video.title }}</h2>
@@ -28,7 +75,6 @@
     {% else %}
         <p>No frames with detected faces found.</p>
     {% endif %}
-
-    <a href="{% url 'upload_video' %}">Upload Another Video</a>
 </body>
+
 </html>
