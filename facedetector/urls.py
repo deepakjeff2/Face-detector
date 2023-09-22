@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('',views.process_video, name='process_video'),
     path('show_results/<int:video_id>/', views.show_results, name='show_results'),
-    path('upload_video/', views.upload_video, name='upload_video'),
+    
 ]
 
 if settings.DEBUG:

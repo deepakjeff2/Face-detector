@@ -55,18 +55,6 @@ def process_video(request):
 
 
 
-def upload_video(request):
-    if request.method == 'POST' and request.FILES.get('video'):
-        video_file = request.FILES['video']
-        video_title = video_file.name
-
-        # Create a Video instance and save the uploaded video
-        video_instance = Video(title=video_title, video_file=video_file)
-        video_instance.save()
-        
-        return redirect('show_results', video_id=video_instance.id)
-
-    return render(request, 'upload_video.html')
 
 
 
