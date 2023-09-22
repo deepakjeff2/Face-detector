@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-# facedetector/models.py
 from django.db import models
 
 class Video(models.Model):

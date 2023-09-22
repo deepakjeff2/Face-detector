@@ -1,13 +1,10 @@
-from django.shortcuts import render
 import os
 from .models import Video, Frame
-# facedetector/views.py
-from .models import Video, Frame
-#import os
 import cv2
 import numpy as np
 from django.shortcuts import render, redirect
-from mtcnn.mtcnn import MTCNN
+
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def process_video(request):
     if request.method == 'POST' and request.FILES['video']:
@@ -22,9 +19,6 @@ def process_video(request):
         frame_dir = os.path.join('media', 'frames', str(video_instance.id))
         os.makedirs(frame_dir, exist_ok=True)
 
-        # Initialize MTCNN for face detection
-        detector = MTCNN()
-
         # Open the video file
         cap = cv2.VideoCapture(video_path)
 
@@ -36,18 +30,16 @@ def process_video(request):
                 break
 
             # Detect faces in the current frame
-            faces = detector.detect_faces(frame)
-            
-            for result in faces:
-                x, y, w, h = result['box']
-                x, y, w, h = int(x), int(y), int(w), int(h)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
+            for (x, y, w, h) in faces:
                 # Draw bounding boxes around detected faces
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 frame_count += 1
 
                 # Save the frame with bounding boxes
-                frame_filename = os.path.join(frame_dir, 'frame_{}.jpg'.format(frame_count))
+                frame_filename = os.path.join(frame_dir, f'frame_{frame_count}.jpg')
                 cv2.imwrite(frame_filename, frame)
 
                 # Create a Frame instance to link to the video
@@ -62,6 +54,7 @@ def process_video(request):
     return render(request, 'upload_video.html')
 
 
+
 def upload_video(request):
     if request.method == 'POST' and request.FILES.get('video'):
         video_file = request.FILES['video']
@@ -70,10 +63,7 @@ def upload_video(request):
         # Create a Video instance and save the uploaded video
         video_instance = Video(title=video_title, video_file=video_file)
         video_instance.save()
-
-        # You can add additional processing or redirect to a different view here
-        # For example, you could redirect to a view that processes the video.
-
+        
         return redirect('show_results', video_id=video_instance.id)
 
     return render(request, 'upload_video.html')
